@@ -1,0 +1,16 @@
+# Disable the 'Missing utf-8 encoding comment' cop.
+Encoding:
+  Enabled: false
+# Disable the 'trailing blank lines detected' cop.
+TrailingBlankLines:
+  Enabled: false
+# the line-length max is fairly arbitrary - sometimes can't
+# easily avoid hitting this limit. we may disable it later.
+# (fwiw, rubocop's default Max LineLength is 80 characters.)
+LineLength:
+  Enabled: false
+#  Max: 210
+# disable new "style cop" added in v0.20.1 (~ Mar/Apr 2014)
+# 'Put one space between the method name and the first argument.'
+SingleSpaceBeforeFirstArg:
+  Enabled: false

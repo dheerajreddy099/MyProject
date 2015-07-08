@@ -1,0 +1,5 @@
+<% node["nbu"]["servers"].each do |servername| -%>
+SERVER = <%= servername %>
+<% end -%>
+CLIENT_NAME = <%= node["hostname"] %>
+CONNECT_OPTIONS = localhost 1 0 2

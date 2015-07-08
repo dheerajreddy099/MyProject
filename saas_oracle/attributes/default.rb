@@ -1,0 +1,6 @@
+default["saas_oracle"]["base"]                      = "/app/oracle"
+default["saas_oracle"]["inventory"]                 = "/app/oraInventory"
+default["saas_oracle"]["version"]                   = "11.2.0.3.0"
+default["saas_oracle"]["host"]                      = ""
+default["saas_oracle"]["sid"]                       = ""
+default["saas_oracle"]["password"]                  = ""

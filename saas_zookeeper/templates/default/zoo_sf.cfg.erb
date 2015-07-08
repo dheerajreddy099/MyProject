@@ -1,0 +1,10 @@
+tickTime=2000
+dataDir=/app/zookeeper/data
+clientPort=2181
+initLimit=5
+syncLimit=2
+<% node["saas_zookeeper"]["servers"].each do |id,hostname| %>
+server.<%= id %>=<%= hostname %>:2888:3888
+<% end %>
+authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+jaasLoginRenew=3600000

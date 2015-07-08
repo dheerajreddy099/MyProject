@@ -1,0 +1,58 @@
+;SQLSERVER2008 Configuration File
+[SQLSERVER2008]
+
+; Specifies a Setup work flow, like INSTALL, UNINSTALL, or UPGRADE. This is a required parameter. 
+
+ACTION="AddNode"
+
+; Displays the command line parameters usage 
+
+HELP="False"
+
+; Specifies that the detailed Setup log should be piped to the console. 
+
+INDICATEPROGRESS="False"
+
+; Setup will not display any user interface. 
+
+QUIET="False"
+
+; Setup will display progress only without any user interaction. 
+
+QUIETSIMPLE="False"
+
+; Specifies that Setup should install into WOW64. This command line argument is not supported on an IA64 or a 32-bit system. 
+
+X86="False"
+
+; The directory for the extracted service pack files used to update the setup media. 
+
+PCUSOURCE="C:\SQLServer2008_FullSP2\PCU"
+
+; Specify a default or named instance. MSSQLSERVER is the default instance for non-Express editions and SQLExpress for Express editions. This parameter is required when installing the SQL Server Database Engine (SQL), Analysis Services (AS), or Reporting Services (RS). 
+
+INSTANCENAME="MSSQLSERVER"
+
+; Specifies the name of the cluster group for the SQL Server failover cluster instance. 
+
+FAILOVERCLUSTERGROUP="SQL Server (MSSQLSERVER)"
+
+; Specifies the name of the SQL Server failover cluster instance.  This name is the network name that is used to connect to SQL Server services. 
+
+FAILOVERCLUSTERNETWORKNAME="SC4WFADBCLS01"
+
+; Agent account name 
+
+AGTSVCACCOUNT="PHX\wfasql_test"
+
+; The name of the account that the Analysis Services service runs under. 
+
+ASSVCACCOUNT="PHX\wfasql_test"
+
+; Account for SQL Server service: Domain\User or system account. 
+
+SQLSVCACCOUNT="PHX\wfasql_test"
+
+; Add description of input argument FTSVCACCOUNT 
+
+FTSVCACCOUNT="NT AUTHORITY\LOCAL SERVICE"

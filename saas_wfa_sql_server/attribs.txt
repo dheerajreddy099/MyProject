@@ -1,0 +1,24 @@
+{
+  "saas_wfa_sql_server": {
+    "Server_type": oltpStandAlone
+    "agent_account": "C5216826",
+    "agent_password": "QWEqwe123",
+    "rs_account": "C5216826",
+    "rs_password": "QWEqwe123",
+    "sql_account": "C5216826",
+    "sql_account_password": "QWEqwe123",
+    "mssqlserverolapservice_account": "C5216826",
+    "mssqlserverolapservice_password": "QWEqwe123",
+    "as_sys_admin_account": "C5216826",
+  }
+}
+
+
+default['saas_wfa_sql_server']['Server_type'] = 'oltpStandAlone'
+
+
+{
+  "saas_wfa_sql_server": {
+    "Server_type": "oltpStandAlone",
+  }
+}

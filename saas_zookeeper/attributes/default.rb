@@ -1,0 +1,1 @@
+default["saas_zookeeper"]["version"]                   = "3.4.5"

@@ -1,0 +1,15 @@
+# There are four formats for keys. 
+# S  Standard format is a  64 bit hex format specified in the DES document. The
+#    low order bit of each byte being a parity bit, a la the NBS standard.
+# N  This NTP format is a 64 bit hex format specified in the NTP standard.
+#    It uses the  high order bit of each byte for parity.  
+# A  Ascii format simply encodes a 1-8 character ascii string as a key. 
+#    Note that because of the simple tokenizing routine, the characters ' ', 
+#    '#', '\t', '\n' and  '\0' can't be used in an ascii key. 
+# M  The Key format is a 1-8 character ascii string, using the MD5 
+#    authentication scheme.
+#
+# keyno  type      key
+# -----  ----  -----------
+#    8     A    bO0gYMAn
+     7	   M    bO0gYMAn

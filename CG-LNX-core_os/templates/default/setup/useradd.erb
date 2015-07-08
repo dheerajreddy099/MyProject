@@ -1,0 +1,7 @@
+# useradd defaults file
+GROUP=<%= node['CG-LNX-core_os']["setup"]["users"]["default"]["gid"] %>
+HOME=<%= node['CG-LNX-core_os']["setup"]["users"]["default"]["home"] %>
+INACTIVE=-1
+EXPIRE=
+SHELL=<%= node['CG-LNX-core_os']["setup"]["users"]["default"]["shell"] %>
+SKEL=<%= node['CG-LNX-core_os']["setup"]["users"]["default"]["skel"] %>

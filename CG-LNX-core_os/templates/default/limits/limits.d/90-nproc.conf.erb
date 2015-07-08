@@ -1,0 +1,11 @@
+# Default limit for number of user's processes to prevent
+# accidental fork bombs.
+# See rhbz #432903 for reasoning.
+
+<% node['CG-LNX-core_os']["limits"]["90-nproc"].each do |domain, itemdata|
+     itemdata.each do |item, typedata|
+        typedata.each do |type, value| -%>
+<%= domain %>		<%= type %>	<%= item %>		<%= value %>
+      <% end
+    end
+end -%>

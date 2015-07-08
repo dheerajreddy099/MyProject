@@ -1,0 +1,59 @@
+[sssd]
+config_file_version = 2
+services = nss, pam, sudo
+domains = <%= @domain.downcase %>
+sbus_timeout = 50
+reconnection_retries = 3
+
+[nss]
+filter_groups = root
+filter_users = root
+reconnection_retries = 3
+default_shell = <%= @defaultShell %>
+
+[pam]
+reconnection_retries = 3
+
+[domain/<%= @domain.downcase %>]
+#debug_level = 9
+id_provider = ad
+auth_provider = ad
+access_provider =  ldap
+ad_server =  <%= @server %>
+case_sensitive = false
+ldap_schema = ad
+ldap_uri = <%= s=""; @server.split(",").each_with_index do |ldap_server,i| s+=(i == 0 ? "#{@ldapType}://#{ldap_server}" : ",#{@ldapType}://#{ldap_server}") end; s %>
+ldap_search_base = <%= s=""; @domain.downcase.split(".").each_with_index do |dc,i| s+=(i == 0 ? "dc=#{dc}" : ",dc=#{dc}") end; s %>
+ldap_default_bind_dn = <%= @ldap_bind_user %>
+ldap_default_authtok_type = password
+ldap_default_authtok = <%= @ldap_bind_password %>
+sudo_provider = ldap
+ldap_sudo_search_base = ou=sudoers<%= s=""; @domain.downcase.split(".").each do |dc| s+=",dc=#{dc}" end ; s %>
+enumerate = false
+cache_credentials = true
+entry_cache_timeout = <%= @entryCacheTimeout %>
+
+# ldap settings
+ldap_id_mapping = true
+ldap_user_search_base = <%= s=""; @domain.downcase.split(".").each_with_index do |dc,i| s+=(i == 0 ? "dc=#{dc}" : ",dc=#{dc}") end; s %>
+ldap_group_search_base = <%= s="" ; @domain.downcase.split(".").each_with_index do |dc,i| s+=(i == 0 ? "dc=#{dc}" : ",dc=#{dc}") end; s %>
+ldap_user_object_class = user
+ldap_user_name = sAMAccountname
+ldap_user_uid_number = uidNumber
+ldap_user_gid_number = gidNumber
+ldap_user_home_directory = unixHomeDirectory
+ldap_user_shell = loginShell
+ldap_user_principal = userPrincipalName
+ldap_access_filter = <%= @ldap_access_filter %> 
+ldap_user_member = memberOf
+ldap_group_object_class = group
+ldap_group_name = sAMAccountname
+ldap_group_gid_number = gidNumber
+ldap_group_member = member
+ldap_group_use_matching_rule_in_chain = true
+ldap_group_nesting_level = 20
+ldap_tls_cacert = /etc/openldap/certs/ca.pem
+ldap_tls_cacertdir = /etc/openldap/certs
+ldap_force_upper_case_realm = true
+
+fallback_homedir = <%= @fallbackHomeDir %>

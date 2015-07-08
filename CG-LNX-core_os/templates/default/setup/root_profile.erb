@@ -1,0 +1,62 @@
+# ported from HP/Sun
+#-------------------------------
+
+
+# Do not put "." in PATH; it is a potential security breach.
+# Do not put "/usr/local/bin" in PATH; it is a potential security breach.
+# Example assumes /home/root exists.
+	set +u
+
+	PATH=$PATH:/root:/opt/OV/bin/OpC
+
+# Be sure that VUE does not invoke tty commands
+
+   # Set up the terminal:
+	if [ "$TERM" = "" ]
+	then
+	        eval ` tset -s -Q -m ':?hp' `
+	else
+	        eval ` tset -s -Q `
+	fi
+	stty erase "^?" kill "^U" intr "^C" eof "^D"
+	stty hupcl ixon ixoff
+
+	echo
+	echo "Value of TERM has been set to \"$TERM\". "
+	export TERM 
+
+	EDITOR=vi
+	export EDITOR
+
+
+# Set up shell environment:
+
+	set -u					# error if undefined variable.
+	trap "echo 'logout root'" 0  		# what to do on exit.
+
+	echo "WARNING:  YOU ARE SUPERUSER !!"
+
+#------------------------------------------------------------------------------
+# CG Customization
+#------------------------------------------------------------------------------
+	PS1="`hostname`# "
+        export PS1
+
+        umask 077
+
+# Set BIG history (msm):
+        HISTSIZE=5000
+        export HISTSIZE
+
+# Set history file RFC MSM001 (msm):
+        HISTFILE=/.`/usr/bin/who am i | /usr/bin/awk '{ print $1 }'`.sh_history
+        export HISTFILE
+
+#switch to ksh if exists (non-single user mode) source /.kshrc for ksh specific stuff
+#
+if [ -x /bin/ksh -a "`tty -s;echo $?`" = "0" ]; then
+    ENV="~/.kshrc"
+    export ENV
+    exec /bin/ksh
+fi
+

@@ -1,0 +1,60 @@
+#!/bin/ksh
+#
+# Customized motd (called via /etc/profile)
+#
+# 01/15/13 BKKH Created
+# 01/06/14 BKKH CPU info simplified
+# 02/23/15 BKKH UC reformating
+#
+convert_megabytes()
+{
+   [ -z "$1" ] && return 1
+   size=$1
+   sizeint=$(print $size | cut -d. -f1)
+   if expr $sizeint \>= 1024 >/dev/null; then
+      #size=$(print "scale=1; $size / 1024" | bc)
+      size=`echo $size | /bin/awk '{CONVFMT="%.1f";printf "%s\n", $1/1024}'`
+      sizeint=$(print $size | cut -d. -f1)
+      if expr $sizeint \>= 1024 >/dev/null; then
+         #size=$(print "scale=1; $size / 1024" | bc)
+         size=`echo $size | /bin/awk '{CONVFMT="%.1f";printf "%s\n", $1/1024}'`
+         sizeint=$(print $size | cut -d. -f1)
+         units=TB
+      else
+         units=GB
+      fi
+   else
+      units=MB
+   fi
+   size=$(print $size | sed 's/\.0//')
+   print $size $units
+   return 0
+}  # end convert_megabytes()
+
+MODEL=`/usr/local/etc/model`
+CPULABEL="vCPUs"
+LINE1="\ \ / /  \/  |"
+LINE2=" \ V /| |\/| |"
+LINE3="  \_/ |_|  |_|"
+
+if [ "$MODEL" != "VMware Virtual Platform" ]; then
+        CPULABEL="CPUs"
+        LINE1="          <o) "
+        LINE2="          /\\\ "
+        LINE3="         _\_V "
+fi
+
+CPUS=`/usr/local/etc/cpus`
+RAM=`/usr/local/etc/memory`
+RAM=$(convert_megabytes $RAM)
+
+
+echo
+echo " _   _  ___      _"
+echo "| | | |/ __|    <o)     Hostname:  `/bin/hostname --fqdn`"
+echo "| |_| | (__     /\\\     OS:        RHEL `/bin/cat /etc/redhat-release | /bin/awk '{print $(NF-1)}'` 64-bit"
+echo " \___/_\___|__ _\_V     HW Model:  $MODEL"
+echo " (o> $LINE1     CPU:       $CPUS $CPULABEL"
+echo " //\ $LINE2     Memory:    $RAM"
+echo " V_/_$LINE3"
+echo

@@ -1,0 +1,190 @@
+#!/bin/ksh
+
+######################################################################
+#                                                                    #
+#  Script Information:	sroot - provides escalation to root with     #
+#                       logging, executing CLI parameters            #
+#                                                                    #
+#			Root privilege is granted via dzdo AD rights #
+#                       definitions                                  #
+#                                                                    #
+#                                                                    #
+#  Modification                                                      #
+#        History:                                                    #
+#                                                                    #
+#  Version:		 1.0                                         #
+#  Created on:		October, 2004                                #
+#  Created by:		BHH                                          #
+#  Notes:		System logfile for Storage Admin access      #
+#                       should be on root in case system is in       #
+#                       single-user mode                             #
+#                                                                    #
+#  Version:		2.0                                          #
+#  Updated on:		October, 2012                                #
+#  Updated by:		JKN                                          #
+#  Modification:	- Rewritten in ksh format                    #
+#               	- Updated to include audit trail email       #
+#               	- Updated to include abort audit trail email #
+#                                                                    #
+#                                                                    #
+######################################################################
+
+
+######################################################################
+#                                                                    #
+# Housekeeping                                                       #
+#                                                                    #
+######################################################################
+
+OS=$(uname -s)
+case ${OS} in 
+  SunOS) MAILX=/usr/bin/mailx 
+         DATE=/usr/bin/date
+	 WHO=/usr/bin/who
+         AWK=/usr/bin/awk
+         UNAME=/usr/bin/uname
+         PRINTF=/usr/bin/printf
+         RM=/usr/bin/rm
+         ROOTHOME="/"
+         ;;
+  HP-UX) MAILX=/usr/bin/mailx 
+         DATE=/usr/bin/date
+	 WHO=/usr/bin/who
+         AWK=/usr/bin/awk
+         UNAME=/usr/bin/uname
+         PRINTF=/usr/bin/printf
+         RM=/usr/bin/rm
+         ROOTHOME="/"
+         ;;
+  Linux) MAILX=/bin/mailx 
+         DATE=/bin/date
+	 WHO=/usr/bin/who
+         AWK=/bin/awk
+         UNAME=/bin/uname
+         PRINTF=/usr/bin/printf
+         RM=/bin/rm
+         ROOTHOME="/root/"
+         ;;
+esac
+
+LOGFILE=${ROOTHOME}/.storage2root.log
+MAILFILE=/tmp/$$sroottmpfile
+EXEDATE=$(${DATE} +%x)
+EXETIME=$(${DATE} +%X)
+WHO=$(${WHO} am i | awk '{print $1}')
+WHERE=$(${UNAME} -n)
+WHAT=$*
+FULLMAILDISTRO="albt@capgroup.com, jkn@capgroup.com"
+
+
+######################################################################
+#                                                                    #
+# Audit email function, called within the program's execution        #
+#                                                                    #
+######################################################################
+
+audit_email()
+  {
+     printf "\n%-80s\n"          "===========================================================================================" >> ${MAILFILE}
+     printf "\n%-80s\n"          "Audit Report:  Privileged Command and/or Shell Session Execution (sroot)" >> ${MAILFILE}
+     printf "%-80s\n\n"          "------------------------------------------------------------------------" >> ${MAILFILE}
+     printf "\n%-80s\n"          "The sroot privileged command/shell escalation utility was executed as follows:" >> ${MAILFILE}
+     printf "\n%-27s %-40s\n"    "      Executed By:" "${WHO}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Execution Date:" "${EXEDATE}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Execution Time:" "${EXETIME}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Executed on Server:" "${WHERE}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Command Executed:" "${WHAT}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Justification:" "${WHY}" >> ${MAILFILE}
+     printf "\n\n%-80s\n\n"      "===========================================================================================" >> ${MAILFILE}
+
+     cat ${MAILFILE} | ${MAILX} -s "Audit Report: Usage of 'sroot' privileged escalation utility (by user: ${WHO})" ${FULLMAILDISTRO}
+     ${RM} -f ${MAILFILE}
+  }
+
+
+######################################################################
+#                                                                    #
+# Audit abort function, called when user aborts sroot execution      #
+#                                                                    #
+######################################################################
+
+abort_email()
+  {
+     printf "\n%-80s\n"          "===========================================================================================" >> ${MAILFILE}
+     printf "\n%-80s\n"          "Audit Report:  Privileged Command and/or Shell Session Execution (sroot)" >> ${MAILFILE}
+     printf "%-80s\n\n"          "------------------------------------------------------------------------" >> ${MAILFILE}
+     printf "\n%-80s\n"          "An sroot privileged command/shell escalation execution was aborted:" >> ${MAILFILE}
+     printf "\n%-27s %-40s\n"    "      Executed/Aborted By:" "${WHO}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Execution Date:" "${EXEDATE}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Execution Time:" "${EXETIME}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Executed on Server:" "${WHERE}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Command Executed:" "${WHAT}" >> ${MAILFILE}
+     printf "%-27s %-40s\n"      "      Justification:" "N/A" >> ${MAILFILE}
+     printf "\n\n%-80s\n\n"      "===========================================================================================" >> ${MAILFILE}
+
+     cat ${MAILFILE} | ${MAILX} -s "Audit Report: 'sroot' privileged escalation utility aborted session (by user: ${WHO})" ${FULLMAILDISTRO}
+     ${RM} -f ${MAILFILE}
+  }
+
+
+######################################################################
+#                                                                    #
+# Clean up the mailfile (pre exec/on abort)                          #
+#                                                                    #
+######################################################################
+
+trap "${RM} -f ${MAILFILE}" EXIT
+trap "abort_email; exit 1" INT QUIT KILL HUP TERM
+
+${RM} -f ${MAILFILE}
+
+
+######################################################################
+#                                                                    #
+# Get verbose justification for executing sroot                      #
+#                                                                    #
+######################################################################
+
+WHY=""
+
+print ""; print""
+print "#######################################################################################"
+print "#                                                                                     #"
+print "#     WARNING:  1) All 'sroot' activities are logged for auditing purposes            #"
+print "#               2) An audit email is generated and sent to the Leadership Team        #"
+print "#                                                                                     #"
+print "#     *** Please ensure all 'sroot' activities meet approved usage guidelines! ***    #"
+print "#                           --- (Press Ctrl+C to Exit) ---                            #"
+print "#                                                                                     #"
+print "#######################################################################################"
+print ""; print""
+
+print "Enter the reason for unrestricted root access - i.e. << missing DZDO command definition >>"
+
+while ((${#WHY}<30)); do
+   read WHY
+   #print "WHY variable length = ${#WHY}"
+   ((${#WHY}<30)) && print "" && print "You didn't enter enough information. Enter a verbose reason for your access to continue!" && print ""
+done
+
+print "${EXEDATE};${EXETIME};${WHO};${WHERE};${WHAT};${WHY}" >> ${LOGFILE}
+
+
+######################################################################
+#                                                                    #
+# Send audit email describing who/what/when/where/etc                #
+# Clean up mailfile when done                                        #
+#                                                                    #
+######################################################################
+
+audit_email
+
+######################################################################
+#                                                                    #
+# Execute the CLI paramater supplied with full root privileges       #
+# Script exits when done (no residual shell)                         #
+#                                                                    #
+######################################################################
+
+exec $*
+

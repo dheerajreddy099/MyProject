@@ -1,0 +1,5 @@
+<% node["CG-LNX-core_os"]["resolv"]["nameservers"].each do |ns| -%>
+nameserver <%= ns %>
+<% end -%>
+domain <%= node['domain'] %>
+

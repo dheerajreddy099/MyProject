@@ -1,0 +1,23 @@
+{
+    "saas_wfa_sql_server": {
+      "Server_type": "oltp&ods",
+      "failover_cluster_disks": ["SQL, SYS"],
+      "failover_cluster_ipaddresses":"IPv4;10.116.84.203;Cluster Network 2;255.255.255.0",
+      "failover_cluster_network_name":"dc13pwfadbcls04",
+      "agent_svc_account":"SFDC\\pwfasql_dc13",
+      "integeration_service_svc_account":"NT AUTHORITY\\NetworkService",
+      "analysis_service_svc_account":"SFDC\\pwfasql_dc13",
+      "analysis_service_collation":"Latin1_General_CI_AS",
+      "analysis_service_datadir":"D:\\OLAP\\Data",
+      "analysis_service_logdir":"D:\\OLAP\\Log",
+      "analysis_service_backupdir":"D:\\OLAP\\Backup",
+      "analysis_service_tempdir":"D:\\OLAP\\Temp",
+      "analysis_service_configdir":"D:\\OLAP\\Config",
+      "analysis_service_sys_admin_accounts":"SFDC\\DC13_WFA_SQL_Administrators",
+      "sql_svc_account":"SFDC\\pwfasql_dc13",
+      "sql_sys_admin_accounts":["SFDC\\pwfasql_dc13", "SFDC\\DC13_WFA_SQL_Administrators"],
+      "install_sql_data_dir":"D:",
+      "full_text_svc_account":"NT AUTHORITY\\LOCAL SERVICE"
+    },
+ "run_list": ["recipe[saas_wfa_sql_server::server]"]
+}

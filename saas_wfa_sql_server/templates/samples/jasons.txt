@@ -1,0 +1,134 @@
+{
+  "saas_wfa_sql_server": {
+    "Server_type": oltpStandAlone
+    "agent_account": "C5216826",
+    "agent_password": "QWEqwe123",
+    "rs_account": "C5216826",
+    "rs_password": "QWEqwe123",
+    "sql_account": "C5216826",
+    "sql_account_password": "QWEqwe123",
+    "mssqlserverolapservice_account": "C5216826",
+    "mssqlserverolapservice_password": "QWEqwe123",
+    "as_sys_admin_account": "C5216826",
+  }
+}
+
+
+#in the below case there are no pwds for the svc accounts as they are service accounts from AD.
+#example for hrml db cluster
+{
+
+  "saas_wfa_sql_server": {
+    "Server_type": hrlm
+    "failover_cluster_disks": "Cluster Disk 1"
+    "failover_cluster_ipaddresses":"IPv4;10.10.48.63;Cluster Network 2;255.255.255.0"
+    "failover_cluster_network_name":"sc4wfadbcls01"
+    "agent_svc_account":"PHX\wfasql_test"
+    "integeration_service_svc_account":"NT AUTHORITY\NetworkService"
+    "analysis_service_svc_account":"PHX\wfasql_test"
+    "analysis_service_collation":"Latin1_General_CI_AS"
+    "analysis_service_datadir":"D:\OLAP\Data"
+    "analysis_service_logdir":"D:\OLAP\Log"
+    "analysis_service_backupdir":"D:\OLAP\Backup"
+    "analysis_service_tempdir":"D:\OLAP\Temp"
+    "analysis_service_configdir":"D:\OLAP\Config"
+    "analysis_service_sys_admin_accounts":"SFDC\DC4_WFA_SQL_Administrators"
+    "sql_svc_account":"PHX\wfasql_test"
+    "sql_sys_admin_accounts":"SFDC\DC4_WFA_SQL_Administrators"
+    "install_sql_data_dir":"D:"
+    "full_text_svc_account":"NT AUTHORITY\LOCAL SERVICE"
+  }
+
+}
+
+
+#example for hrml db cluster node
+{
+  "saas_wfa_sql_server": {
+    "Server_type": hrml-node
+    "failover_cluster_network_name":"SC4WFADBCLS01"
+    "agent_svc_account":"PHX\wfasql_test"
+    "analysis_service_svc_account":"PHX\wfasql_test"
+    "sql_svc_account":"PHX\wfasql_test"
+    "full_text_svc_account":"NT AUTHORITY\LOCAL SERVICE"
+  }
+}
+
+
+
+#example for oltp&ods db cluster
+Bereti, Istvan	{{
+    "saas_wfa_sql_server": {
+      "Server_type": "oltp&ods",
+      "failover_cluster_disks":"SQL SYS",
+      "failover_cluster_ipaddresses":"IPv4;10.116.84.203;Cluster Network 2;255.255.254.0",
+      "failover_cluster_network_name":"dc13pwfadbcls04",
+      "agent_svc_account":"SFDC\\wfasql_dc13",
+      "integeration_service_svc_account":"NT AUTHORITY\\NetworkService",
+      "analysis_service_svc_account":"SFDC\\wfasql_dc13",
+      "analysis_service_collation":"Latin1_General_CI_AS",
+      "analysis_service_datadir":"D:\\OLAP\\Data",
+      "analysis_service_logdir":"D:\\OLAP\\Log",
+      "analysis_service_backupdir":"D:\\OLAP\\Backup",
+      "analysis_service_tempdir":"D:\\OLAP\\Temp",
+      "analysis_service_configdir":"D:\\OLAP\\Config",
+      "analysis_service_sys_admin_accounts":"SFDC\\DC13_WFA_SQL_Administrators",
+      "sql_svc_account":"SFDC\\wfasql_dc13",
+      "sql_sys_admin_accounts":"SFDC\\wfasql_dc13\" \"SFDC\\DC13_WFA_SQL_Administrators",
+      "install_sql_data_dir":"D:/",
+      "full_text_svc_account":"NT AUTHORITY\\LOCAL SERVICE"
+  },
+ "run_list": [
+   "recipe[saas_wfa_sql_server::Server]"
+ ]
+}
+
+
+
+#example for oltp&ods db cluster node
+{
+  "saas_wfa_sql_server": {
+    "Server_type": oltp&ods-node
+    "failover_cluster_network_name":"SC4WFADBCLS04"
+    "agent_svc_account":"PHX\wfasql_test"
+    "sql_svc_account":"PHX\wfasql_test"
+    "full_text_svc_account":"NT AUTHORITY\LOCAL SERVICE"
+  }
+}
+
+{
+  "saas_wfa_platform": {
+    "winfeatures": {
+      "features": [
+        "web-asp-net",
+        "AS-HTTP-Activation",
+        "AS-WAS-Support",
+        "AS-TCP-Activation",
+        "AS-Named-Pipes",
+        "File-Services",
+        "AS-NET-Framework",
+        "Web-Server",
+        "Web-ISAPI-Ext",
+        "Web-ISAPI-Filter",
+        "Web-CGI",
+        "Web-IP-Security",
+        "Desktop-Experience"
+      ]
+    }
+  },
+  "saas_wfa_app_server": {
+    "wfajob_username": "wfajob_LAB-ROT@saas-ad.sap.corp",
+    "wfajob_password": "'<bND_M7%Wva5]@6",
+    "wfaiis_username": "wfaiis_LAB-ROT@saas-ad.sap.corp",
+    "wfaiis_password": "&eWg!36'Vu@=BaHE"
+  }
+}
+
+
+
+
+
+
+
+
+

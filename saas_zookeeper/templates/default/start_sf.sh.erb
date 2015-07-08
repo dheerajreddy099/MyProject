@@ -1,0 +1,13 @@
+#!/bin/bash
+
+BASEDIR=/app/zookeeper
+
+cd $BASEDIR/dist
+
+java  -Djava.rmi.server.hostname=`hostname -i` \
+      -Dcom.sun.management.jmxremote.port=2101 \
+      -Dcom.sun.management.jmxremote.authenticate=false \
+      -Dcom.sun.management.jmxremote.ssl=false \
+      -Djava.security.auth.login.config=$BASEDIR/conf/jaas_server.conf \
+      -Xmx1g -cp \
+      "*:lib/*:conf"  org.apache.zookeeper.server.quorum.QuorumPeerMain $BASEDIR/conf/zoo_sf.cfg
